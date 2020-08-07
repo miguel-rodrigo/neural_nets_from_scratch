@@ -2,7 +2,7 @@ import numpy as np
 
 
 class Layer:
-    def __init__(self, n_units=0, n_units_next=0):
+    def __init__(self, activation, n_units=0, n_units_next=0):
         self.W = np.random.standard_normal((n_units_next, n_units))
         self.b = np.zeros((n_units, 1))
 
@@ -15,8 +15,8 @@ class Layer:
             'A': np.array([])
         }
 
-        self.activation = None
-        self.activation_derivative = None
+        self.activation = activation.activation
+        self.activation_derivative = activation.derivative
 
     def forward_pass(self, X):
         Z = np.dot(self.W, X) + self.b
