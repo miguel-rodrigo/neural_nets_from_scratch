@@ -2,7 +2,7 @@ import numpy as np
 
 
 class Layer:
-    def __init__(self, activation, n_units=0, n_units_next=0):
+    def __init__(self, n_units, n_units_next, activation):
         self.W = np.random.standard_normal((n_units_next, n_units))
         self.b = np.zeros((n_units_next, 1))
 
