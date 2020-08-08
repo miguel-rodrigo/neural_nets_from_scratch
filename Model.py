@@ -29,7 +29,7 @@ class Model:
             s += "Layer " + str(i+1) + ":\n"
             s += "----------\n"
             s += "# of units: " + str(self.layer_sizes[i]) + "\n"
-            s += "Activation: " + str(layer.activation) + "\n"
+            s += "Activation: " + str(layer.activation_class) + "\n"
             s += "  - W: " + str(layer.W.shape) + "\n"
             s += "  - b: " + str(layer.b.shape) + "\n"
 

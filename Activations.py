@@ -3,39 +3,39 @@ import numpy as np
 
 class Activation:
     @staticmethod
-    def activation(x):
+    def forward(x):
         raise NotImplementedError
 
     @staticmethod
-    def derivative(x):
+    def backward(x):
         raise NotImplementedError
 
 
 class ReLU(Activation):
     @staticmethod
-    def activation(x):
+    def forward(x):
         return np.maximum(0, x)
 
     @staticmethod
-    def derivative(x):
+    def backward(x):
         return np.where(x >= 0, 1, 0)
 
 
 class Sigmoid(Activation):
     @staticmethod
-    def activation(x):
+    def forward(x):
         return 1 / (1+np.exp(-x))
 
     @staticmethod
-    def derivative(x):
-        return Sigmoid.activation(x) * (1-Sigmoid.activation(x))
+    def backward(x):
+        return Sigmoid.forward(x) * (1-Sigmoid.forward(x))
 
 
 class Linear(Activation):
     @staticmethod
-    def activation(x):
+    def forward(x):
         return x
 
     @staticmethod
-    def derivative(x):
+    def backward(x):
         return 1
