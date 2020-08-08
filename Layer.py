@@ -20,7 +20,11 @@ class Layer:
     def forward_pass(self, X):
         Z = np.dot(self.W, X) + self.b
         self.cache['Z'] = Z
-        return self.activation_class.forward(Z)
+
+        A = self.activation_class.forward(Z)
+        self.cache['A'] = A
+
+        return A
 
     def backward_pass(self, prev_cache):
         m = self.cache['Z'].shape[1]
