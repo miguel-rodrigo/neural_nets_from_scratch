@@ -15,6 +15,12 @@ class Model:
         self.layers = [Layer(units_prev, units_next, activation) for
                        (units_prev, units_next), activation in layer_info]
 
+        # TODO: Make loss function modular
+        def loss_function(m, Y, Y_hat):
+            return 1/m * np.sum(-Y*np.log(Y_hat) - (1-Y)*np.log(1-Y_hat))
+
+        self.loss_function = loss_function
+
     def __str__(self):
         s = ""
 
