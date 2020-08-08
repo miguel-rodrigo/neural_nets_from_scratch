@@ -4,7 +4,7 @@ import numpy as np
 class Layer:
     def __init__(self, activation, n_units=0, n_units_next=0):
         self.W = np.random.standard_normal((n_units_next, n_units))
-        self.b = np.zeros((n_units, 1))
+        self.b = np.zeros((n_units_next, 1))
 
         self.dW = np.array(())
         self.db = np.array(())
