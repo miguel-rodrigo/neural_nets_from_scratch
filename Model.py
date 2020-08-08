@@ -1,6 +1,6 @@
 import numpy as np
 from Layer import Layer
-import Activation
+import Activations
 
 
 class Model:
@@ -38,5 +38,5 @@ class Model:
 
 if __name__ == "__main__":
     n_units = [4, 4, 2, 1]
-    activations = [Activation.ReLU, Activation.ReLU, Activation.Sigmoid]
+    activations = [Activations.ReLU, Activations.ReLU, Activations.Sigmoid]
     model = Model(n_units, activations)
