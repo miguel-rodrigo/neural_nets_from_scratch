@@ -1,5 +1,6 @@
 import numpy as np
-import Layer
+from Layer import Layer
+import Activation
 
 
 class Model:
@@ -8,5 +9,5 @@ class Model:
         dim_vector = zip(n_units_vector[:-1], n_units_vector[1:])
         layer_info = zip(dim_vector, activations)
 
-        self.layers = [Layer(activation, units_prev, units_next) for
+        self.layers = [Layer(units_prev, units_next, activation) for
                        (units_prev, units_next), activation in layer_info]
