@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def create_fake_data(num_points=200, num_petals=6, random_jitter_strength=0.05):
+def create_fake_data(num_points=200, num_petals=8, random_jitter_strength=0.05):
     assert num_petals % 2 == 0, "# of petals has to be an even number"
 
     np.random.seed(123)
