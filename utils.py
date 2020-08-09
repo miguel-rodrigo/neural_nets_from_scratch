@@ -1,17 +1,16 @@
 import numpy as np
 
 
-def create_fake_data(num_points=200, num_petals=6):
+def create_fake_data(num_points=200, num_petals=6, random_jitter_strength=0.05):
     assert num_petals % 2 == 0, "# of petals has to be an even number"
 
     np.random.seed(123)
     theta = np.random.uniform(0, 2*np.pi, num_points)
     r = np.cos(num_petals//2)
 
-    x1 = r * np.cos(theta)
-    x2 = r * np.sin(theta)
+    x1 = r * np.cos(theta) + np.random.standard_normal(theta.shape)*random_jitter_strength
+    x2 = r * np.sin(theta) + np.random.standard_normal(theta.shape)*random_jitter_strength
 
-    # TODO: Add random jitter to X
     X = np.vstack((x1, x2))
 
     # Octant I: 0
