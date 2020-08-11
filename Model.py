@@ -41,6 +41,29 @@ class Model:
 
         return s
 
+    def train_step(self, X, Y, n_epochs, learning_rate=0.003):
+        A_prev = X
+        loss = np.inf
+        m = X.shape[1]
+
+        for i in range(n_epochs):
+            # Forward pass
+            for layer in self.layers:
+                A_prev = layer.forward_pass(A_prev)
+
+            Y_hat = A_prev
+            loss = self.loss_function(m, Y, Y_hat)
+            yield loss
+
+            # Backward pass
+            all_As = [layer.cache['A'] for layer in self.layers]
+            # TODO: test np.multiply(-y, 1/y_hat)... for multivariate y and y_hat
+            #   --> for multivariate won't work, what do we use for softmax loss?
+            dA = np.multiply(-Y, 1 / Y_hat) + np.multiply((1 - Y) / (1 - Y_hat))
+            # TODO: Recorrer all_As y all layers obviando la última capa
+            for layer, prev_cache in zip(self.layers[::-2], all_As[1::-1]):
+                dA = layer.backward_pass()
+
 
 if __name__ == "__main__":
     n_units = [4, 4, 2, 1]
