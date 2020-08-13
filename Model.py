@@ -46,6 +46,7 @@ class Model:
 
         return s
 
+    # TODO: This is currently a pass through the whole training set. Add minibatch options!
     def train_step(self, X, Y, n_epochs, learning_rate=0.003):
         A_prev = X
         loss = np.inf
