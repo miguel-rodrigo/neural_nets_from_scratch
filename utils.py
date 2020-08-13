@@ -15,6 +15,7 @@ def create_fake_data(num_points=200, num_petals=8, random_jitter_strength=0.02,
     x2 = r * np.sin(theta) + np.random.standard_normal(theta.shape)*random_jitter_strength
 
     X = np.vstack((x1, x2))
+    assert X.shape == (2, num_points)
 
     # Octant I: 0
     # Octants II, III: 1
