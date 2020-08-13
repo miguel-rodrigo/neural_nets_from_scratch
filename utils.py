@@ -24,7 +24,7 @@ def create_fake_data(num_points=200, num_petals=8, random_jitter_strength=0.02,
     octants = np.floor(theta / (2*np.pi) * 8) + 1
     zero_octants = [1, 4, 6, 7]
     Y = [0 if octant in zero_octants else 1 for octant in octants]
-    Y = np.array(Y, shape=(1, num_points), dtype=np.bool_)
+    Y = np.array(Y, ndmin=2, dtype=np.bool_) # ndmin=2 makes is a column vector
 
     # Add extra noise by inverting some labels at random
     rand_idx = np.random.randint(num_points,
