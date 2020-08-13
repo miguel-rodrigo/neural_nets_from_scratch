@@ -4,6 +4,11 @@ import Activations
 
 
 class Model:
+    # TODO:
+    #   - Update parameters function (which depends on the optimizer)
+    #   - Predict function
+    #   - __call__ method that calls the predict function
+
     def __init__(self, n_units_vector, activations):
         self.input_size = n_units_vector[0]
         self.layer_sizes = n_units_vector[1:]
