@@ -2,13 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+# TODO BUG: Debug why fake data is divided in 16 regions when octants goes in [1.,8.]
 def create_fake_data(num_points=200, num_petals=8, random_jitter_strength=0.02,
                      wrong_label_ratio=0.1):
     assert num_petals % 2 == 0, "# of petals has to be an even number"
 
     np.random.seed(123)
     theta = np.random.uniform(0, 2*np.pi, num_points)
-    r = np.cos(num_petals//2)
+    r = np.cos(num_petals//2*theta)
 
     x1 = r * np.cos(theta) + np.random.standard_normal(theta.shape)*random_jitter_strength
     x2 = r * np.sin(theta) + np.random.standard_normal(theta.shape)*random_jitter_strength
