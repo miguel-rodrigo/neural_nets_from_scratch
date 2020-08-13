@@ -2,7 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def create_fake_data(num_points=200, num_petals=8, random_jitter_strength=0.05):
+def create_fake_data(num_points=200, num_petals=8, random_jitter_strength=0.02,
+                     wrong_label_ratio=0.1):
     assert num_petals % 2 == 0, "# of petals has to be an even number"
 
     np.random.seed(123)
@@ -23,6 +24,13 @@ def create_fake_data(num_points=200, num_petals=8, random_jitter_strength=0.05):
     octants = np.floor(theta / (2*np.pi) * 8) + 1
     zero_octants = [1, 4, 6, 7]
     Y = [0 if octant in zero_octants else 1 for octant in octants]
+    Y = np.array(Y, shape=(1, num_points), dtype=np.bool_)
+
+    # Add extra noise by inverting some labels at random
+    rand_idx = np.random.randint(num_points,
+                                 size=int(num_points * wrong_label_ratio))
+    Y[:, rand_idx] = ~Y[:, rand_idx]
+    Y = Y.astype(np.float)
 
     return X, Y
 
