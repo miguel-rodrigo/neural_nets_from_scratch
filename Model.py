@@ -92,8 +92,12 @@ class Model:
 
 
 if __name__ == "__main__":
-    n_units = [2, 2, 1]
-    activations = [Activations.ReLU, Activations.Sigmoid]
+    import utils
+
+    np.random.seed(1)
+
+    n_units = [2, 4, 2, 1]
+    activations = [Activations.ReLU, Activations.ReLU, Activations.Sigmoid]
     model = Model(n_units, activations)
 
     X, Y = utils.create_fake_data()
@@ -101,3 +105,5 @@ if __name__ == "__main__":
     for i, iteration_loss in enumerate(model.train(X, Y, n_epochs=n_epochs)):
         if i % 100 == 0 or i == n_epochs-1:
             print("Loss on iteration {}: {}".format(i, iteration_loss))
+
+    utils.draw_decision_boundary(model, X, Y)
