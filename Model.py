@@ -71,7 +71,7 @@ class Model:
             #   --> for multivariate won't work, what do we use for softmax loss?
             dA = np.multiply(-Y, 1 / Y_hat) + np.multiply((1 - Y), 1 / (1 - Y_hat))
             for layer in self.layers[::-1]:
-                dA = layer.backward_pass(prev_A=layer.cache['A'], prev_dA=dA)
+                A_prev, dA = layer.backward_pass(prev_A=A_prev, prev_dA=dA)
 
             # 4. Update parameters
             self.update_parameters()

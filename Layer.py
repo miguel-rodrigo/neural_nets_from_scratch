@@ -34,4 +34,4 @@ class Layer:
         self.db = 1/m * np.sum(dZ, axis=1, keepdims=True)
         dA = np.dot(self.W.T, dZ)
 
-        return dA
+        return self.cache['A'], dA
