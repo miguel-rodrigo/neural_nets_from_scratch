@@ -7,10 +7,11 @@ import utils
 
 class Model:
     # TODO:
-    #   - Make update parameters function depend on the optimizer
-    #   - Predict function
+    #   - Make the parameters update function depend on the optimizer
     #   - __call__ method that calls the predict function
-    #   - Gradient checking
+    #   - Gradient checking: I believe my gradients are off...
+    #   - Make predictions on validation set during training
+    #   - Create plot of training loss and validation loss during training
 
     def __init__(self, n_units_vector, activations):
         self.input_size = n_units_vector[0]
