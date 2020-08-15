@@ -2,7 +2,6 @@ import numpy as np
 from Layer import Layer
 import Activations
 
-import utils
 
 
 class Model:
