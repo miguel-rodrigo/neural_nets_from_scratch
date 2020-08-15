@@ -16,20 +16,24 @@ def create_fake_data(num_points=200, num_petals=8, random_jitter_strength=0.02,
     X = np.vstack((x1, x2))
     assert X.shape == (2, num_points)
 
-    # Octant I: 0
-    # Octants II, III: 1
-    # Octant IV: 0
-    # Octant V: 1
-    # Octatns VI, VII: 0
-    # Octact VIII: 1
-    octants = np.floor(theta / (2*np.pi) * 8) + 1
-    zero_octants = [1, 4, 6, 7]
-    Y = [0 if octant in zero_octants else 1 for octant in octants]
-    Y = np.array(Y, ndmin=2, dtype=np.bool_) # ndmin=2 makes is a column vector
+    # Y: colors -> 0: blue; 1: red
+    Y = np.zeros((1, num_points), dtype=np.bool_)
+    for i, (xi, yi) in enumerate(zip(x1, x2)):
+        if xi * yi > 0:
+            if yi > xi:
+                Y[:, i] = 1
+            else:
+                Y[:, i] = 0
+        else:
+            if yi > -xi:
+                Y[:, i] = 1
+            else:
+                Y[:, i] = 0
 
     # Add extra noise by inverting some labels at random
     rand_idx = np.random.randint(num_points,
                                  size=int(num_points * wrong_label_ratio))
+
     Y[:, rand_idx] = ~Y[:, rand_idx]
     Y = Y.astype(np.float)
 
