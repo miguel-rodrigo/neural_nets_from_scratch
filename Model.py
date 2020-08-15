@@ -91,9 +91,6 @@ class Model:
         y_hat = np.float_(A_prev >= 0.5)
         return y_hat
 
-    # def __call__(self, *args, **kwargs):
-    #     self.predict(*args)
-
 
 if __name__ == "__main__":
     n_units = [2, 2, 1]
