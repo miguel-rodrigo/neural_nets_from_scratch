@@ -2,12 +2,15 @@ import numpy as np
 from Layer import Layer
 import Activations
 
+import utils
+
 
 class Model:
     # TODO:
-    #   - Update parameters function (which depends on the optimizer)
+    #   - Make update parameters function depend on the optimizer
     #   - Predict function
     #   - __call__ method that calls the predict function
+    #   - Gradient checking
 
     def __init__(self, n_units_vector, activations):
         self.input_size = n_units_vector[0]
@@ -41,37 +44,57 @@ class Model:
             s += "----------\n"
             s += "# of units: " + str(self.layer_sizes[i]) + "\n"
             s += "Activation: " + str(layer.activation_class) + "\n"
+            s += "Parameter dimensions: " + "\n"
             s += "  - W: " + str(layer.W.shape) + "\n"
             s += "  - b: " + str(layer.b.shape) + "\n"
 
         return s
 
-    # TODO: This is currently a pass through the whole training set. Add minibatch options!
-    def train_step(self, X, Y, n_epochs, learning_rate=0.003):
+    # TODO: This is a pass through the whole training set. Add minibatch option!
+    def train(self, X, Y, n_epochs=100, learning_rate=0.003):
         A_prev = X
         loss = np.inf
         m = X.shape[1]
 
         for i in range(n_epochs):
-            # Forward pass
+            # 1. Forward pass
             for layer in self.layers:
                 A_prev = layer.forward_pass(A_prev)
 
             Y_hat = A_prev
             loss = self.loss_function(m, Y, Y_hat)
+            # TODO: This yield is not doing what I expected:
             yield loss
 
-            # Backward pass
-            all_As = [layer.cache['A'] for layer in self.layers]
+            # 2. Backward pass
             # TODO: test np.multiply(-y, 1/y_hat)... for multivariate y and y_hat
             #   --> for multivariate won't work, what do we use for softmax loss?
-            dA = np.multiply(-Y, 1 / Y_hat) + np.multiply((1 - Y) / (1 - Y_hat))
-            # TODO: Recorrer all_As y all layers obviando la última capa
-            for layer, prev_cache in zip(self.layers[::-2], all_As[1::-1]):
-                dA = layer.backward_pass()
+            dA = np.multiply(-Y, 1 / Y_hat) + np.multiply((1 - Y), 1 / (1 - Y_hat))
+            for layer in self.layers[-2::-1]:
+                dA = layer.backward_pass(prev_A=layer.cache['A'], prev_dA=dA)
+
+            # 3. Update parameters
+            self.update_parameters()
+
+    def update_parameters(self, learning_rate=0.05):
+        # TODO: There is an error here to be fixed:
+        for layer in self.layers:
+            layer.W = layer.W - learning_rate * layer.dW
+
+    def predict(self, X):
+        A_prev = X
+        for layer in self.layers:
+            A_prev = layer.forward_pass(A_prev)
+
+        # The last "previous" activation is actually the prediction
+        return A_prev
 
 
 if __name__ == "__main__":
-    n_units = [4, 4, 2, 1]
-    activations = [Activations.ReLU, Activations.ReLU, Activations.Sigmoid]
+    n_units = [2, 2, 1]
+    activations = [Activations.ReLU, Activations.Sigmoid]
     model = Model(n_units, activations)
+
+    X, Y = utils.create_fake_data()
+    n_epochs = 100
+    loss = model.train(X, Y, n_epochs=n_epochs)
