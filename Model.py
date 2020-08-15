@@ -52,34 +52,34 @@ class Model:
 
     # TODO: This is a pass through the whole training set. Add minibatch option!
     def train(self, X, Y, n_epochs=100, learning_rate=0.003):
-        A_prev = X
         loss = np.inf
         m = X.shape[1]
 
         for i in range(n_epochs):
             # 1. Forward pass
+            A_prev = X
             for layer in self.layers:
                 A_prev = layer.forward_pass(A_prev)
 
+            # 2. Compute and return loss for evaluation
             Y_hat = A_prev
             loss = self.loss_function(m, Y, Y_hat)
-            # TODO: This yield is not doing what I expected:
             yield loss
 
-            # 2. Backward pass
+            # 3. Backward pass
             # TODO: test np.multiply(-y, 1/y_hat)... for multivariate y and y_hat
             #   --> for multivariate won't work, what do we use for softmax loss?
             dA = np.multiply(-Y, 1 / Y_hat) + np.multiply((1 - Y), 1 / (1 - Y_hat))
-            for layer in self.layers[-2::-1]:
+            for layer in self.layers[::-1]:
                 dA = layer.backward_pass(prev_A=layer.cache['A'], prev_dA=dA)
 
-            # 3. Update parameters
+            # 4. Update parameters
             self.update_parameters()
 
     def update_parameters(self, learning_rate=0.05):
-        # TODO: There is an error here to be fixed:
         for layer in self.layers:
             layer.W = layer.W - learning_rate * layer.dW
+            layer.b = layer.b - learning_rate * layer.db
 
     def predict(self, X):
         A_prev = X
@@ -89,6 +89,9 @@ class Model:
         # The last "previous" activation is actually the prediction
         return A_prev
 
+    # def __call__(self, *args, **kwargs):
+    #     self.predict(*args)
+
 
 if __name__ == "__main__":
     n_units = [2, 2, 1]
@@ -96,5 +99,7 @@ if __name__ == "__main__":
     model = Model(n_units, activations)
 
     X, Y = utils.create_fake_data()
-    n_epochs = 100
-    loss = model.train(X, Y, n_epochs=n_epochs)
+    n_epochs = 1000
+    for i, iteration_loss in enumerate(model.train(X, Y, n_epochs=n_epochs)):
+        if i % 100 == 0 or i == n_epochs-1:
+            print("Loss on iteration {}: {}".format(i, iteration_loss))
