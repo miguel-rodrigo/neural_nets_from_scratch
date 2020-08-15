@@ -8,7 +8,6 @@ import utils
 class Model:
     # TODO:
     #   - Make the parameters update function depend on the optimizer
-    #   - __call__ method that calls the predict function
     #   - Gradient checking: I believe my gradients are off...
     #   - Make predictions on validation set during training
     #   - Create plot of training loss and validation loss during training
