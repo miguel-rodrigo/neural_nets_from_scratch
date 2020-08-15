@@ -7,10 +7,10 @@ import utils
 
 class Model:
     # TODO:
+    #   - Gradient checking: I believe my gradients are off...results are awful :(
     #   - Make the parameters update function depend on the optimizer
-    #   - Gradient checking: I believe my gradients are off...
     #   - Make predictions on validation set during training
-    #   - Create plot of training loss and validation loss during training
+    #   - Create plot of training loss and validation loss during training process
 
     def __init__(self, n_units_vector, activations):
         self.input_size = n_units_vector[0]
