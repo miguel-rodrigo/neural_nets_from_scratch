@@ -26,11 +26,11 @@ class Layer:
 
         return A
 
-    def backward_pass(self, prev_cache, prev_dA):
+    def backward_pass(self, prev_A, prev_dA):
         m = self.cache['Z'].shape[1]
 
         dZ = np.multiply(prev_dA, self.activation_class.backward(self.cache['Z']))
-        self.dW = 1/m * np.dot(dZ, prev_cache['A'].T)
+        self.dW = 1/m * np.dot(dZ, prev_A.T)
         self.db = 1/m * np.sum(dZ, axis=1, keepdims=True)
         dA = np.dot(self.W.T, dZ)
 
