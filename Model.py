@@ -12,7 +12,7 @@ class Model:
     #   - Make predictions on validation set during training
     #   - Create plot of training loss and validation loss during training process
 
-    def __init__(self, n_units_vector, activations):
+    def __init__(self, n_units_vector, activations, parameters=None):
         self.input_size = n_units_vector[0]
         self.layer_sizes = n_units_vector[1:]
 
@@ -22,6 +22,20 @@ class Model:
 
         self.layers = [Layer(units_prev, units_next, activation) for
                        (units_prev, units_next), activation in layer_info]
+
+        if parameters is not None:
+            # TODO: is it better to use try/except instead? research that
+            # Make sure parameters has the correct length
+            assert len(parameters) == len(self.layers),\
+                "Length of parameters list ({}) does not match #of layers {}"\
+                .format(len(parameters), len(self.layers))
+            # Make sure parameters is a list of dicts
+            assert isinstance(parameters, list)
+            assert isinstance(parameters[0], dict)
+
+            for layer, params in zip(self.layers, parameters):
+                layer.W = params['W']
+                layer.b = params['b']
 
         # TODO: Make loss function modular
         def loss_function(m, Y, Y_hat):
@@ -89,6 +103,13 @@ class Model:
         # The last "previous" activation is actually the prediction
         y_hat = np.float_(A_prev >= 0.5)
         return y_hat
+
+    # def gradient_checking(self, X, Y, epsilon=1e-7):
+    #     grads = [(l.W, l.b) for l in self.layers]
+    #     grad_approx = [(0., 0.)] * len(grads)
+    #
+    #     for i in range(len(grad_approx)):
+    #         theta_plus =
 
 
 if __name__ == "__main__":
