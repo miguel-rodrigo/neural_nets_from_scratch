@@ -88,7 +88,8 @@ class Model:
             A_prev = layer.forward_pass(A_prev)
 
         # The last "previous" activation is actually the prediction
-        return A_prev
+        y_hat = np.float_(A_prev >= 0.5)
+        return y_hat
 
     # def __call__(self, *args, **kwargs):
     #     self.predict(*args)
