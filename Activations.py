@@ -1,5 +1,7 @@
 import numpy as np
 
+# TODO: create additional decorator for a try/catch block that checks dimensions of x
+
 
 class Activation:
     @staticmethod
