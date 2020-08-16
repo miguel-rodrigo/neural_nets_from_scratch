@@ -69,22 +69,60 @@ def draw_decision_boundary(model, X, y):
     plt.xlabel('x1')
     plt.scatter(X[0, :], X[1, :], c=y, cmap=plt.cm.Spectral)
 
-    def gradient_checking(model, X, Y, epsilon=1e-7):
-        """
-        Checks the relative difference between the gradients estimated through backprop vs. gradients estimated
-        using the definition of derivatives (computing the rate of growth over a small step epsilon).
 
-        The goal of this function is to detect errors on the backpropagation formulae.
-        :param model: trained model to be tested
-        :param X: data used to trained the model
-        :param Y: labels used to trained the model, necesary to compute the cost function
-        :param epsilon: size of the step to be used in the gradient approximations
-        :return: relative difference of backprop vs. approximate gradients, by layer and set of parameters
-        """
-        grads = [{'W': l.W, 'b': l.b} for l in model.layers]
-        grad_approx = [{'W': 0., 'b': 0.}] * len(grads)
+def gradient_checking(model, X, Y, epsilon=1e-7):
+    """
+    Checks the relative difference between the gradients estimated through backprop vs. gradients estimated
+    using the definition of derivatives (computing the rate of growth over a small step epsilon).
 
-        for i in range(len(grads)):
-            theta_plus = grads
-            theta_plus[i]['W'] = theta_plus[i]['W'] + epsilon
+    The goal of this function is to detect errors on the backpropagation formulae.
+    :param model: trained model to be tested
+    :param X: data used to trained the model
+    :param Y: labels used to trained the model, necesary to compute the cost function
+    :param epsilon: size of the step to be used in the gradient approximations
+    :return: relative difference of backprop vs. approximate gradients, by layer and set of parameters
+    """
+    from Model import Model
 
+    n_units_vector = [model.input_size] + model.layer_sizes
+    activations = [l.activation_class for l in model.layers]
+
+    grads = model.gradients
+    differences = [{'W': 0., 'b': 0.}] * len(grads)
+
+    for i in range(len(grads)):
+        # Once for W...
+        theta_plus = model.parameters
+        theta_plus[i]['W'] = theta_plus[i]['W'] + epsilon
+        tmp_model = Model(n_units_vector, activations, parameters=theta_plus)
+        tmp_predictions = tmp_model.predict(X)
+        cost_plus = model.loss_function(Y, tmp_predictions)
+
+        theta_minus = model.parameters
+        theta_plus[i]['W'] = theta_plus[i]['W'] - epsilon
+        tmp_model = Model(n_units_vector, activations, parameters=theta_minus)
+        tmp_predictions = tmp_model.predict(X)
+        cost_minus = model.loss_function(Y, tmp_predictions)
+
+        grad_approx_W = (cost_plus - cost_minus) / (2*epsilon)
+        numerator = np.linalg.norm(grads[i]['W'] - grad_approx_W)
+        denominator = np.linalg.norm(grads[i]['W']) + np.linalg.norm(grad_approx_W)
+        differences[i]['W'] = numerator / denominator
+
+        # ...and another time for b
+        theta_plus = model.parameters
+        theta_plus[i]['b'] = theta_plus[i]['b'] + epsilon
+        tmp_model = Model(n_units_vector, activations, parameters=theta_plus)
+        tmp_predictions = tmp_model.predict(X)
+        cost_plus = model.loss_function(Y, tmp_predictions)
+
+        theta_minus = model.parameters
+        theta_plus[i]['b'] = theta_plus[i]['b'] - epsilon
+        tmp_model = Model(n_units_vector, activations, parameters=theta_minus)
+        tmp_predictions = tmp_model.predict(X)
+        cost_minus = model.loss_function(Y, tmp_predictions)
+
+        grad_approx_b = (cost_plus - cost_minus) / (2 * epsilon)
+        numerator = np.linalg.norm(grads[i]['b'] - grad_approx_b)
+        denominator = np.linalg.norm(grads[i]['b']) + np.linalg.norm(grad_approx_b)
+        differences[i]['b'] = numerator / denominator
