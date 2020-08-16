@@ -63,6 +63,16 @@ class Model:
 
         return s
 
+    @property
+    def parameters(self):
+        parameters = [{'W': layer.W, 'b': layer.b} for layer in self.layers]
+        return parameters
+
+    @property
+    def gradients(self):
+        parameters = [{'dW': layer.dW, 'db': layer.db} for layer in self.layers]
+        return parameters
+
     # TODO: This is a pass through the whole training set. Add minibatch option!
     def train(self, X, Y, n_epochs=100, learning_rate=0.003):
         m = X.shape[1]
