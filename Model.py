@@ -37,8 +37,9 @@ class Model:
                 layer.b = params['b']
 
         # TODO: Make loss function modular
-        def loss_function(m, Y, Y_hat):
-            return 1/m * np.sum(-Y*np.log(Y_hat) - (1-Y)*np.log(1-Y_hat))
+        def loss_function(Y, Y_hat):
+            m = Y.shape[1]
+            return 1 / m * np.sum(-Y * np.log(Y_hat) - (1 - Y) * np.log(1 - Y_hat))
 
         self.loss_function = loss_function
 
@@ -76,7 +77,7 @@ class Model:
 
             # 2. Compute and return loss for evaluation
             Y_hat = A_prev
-            loss = self.loss_function(m, Y, Y_hat)
+            loss = self.loss_function(Y, Y_hat)
             yield loss
 
             # 3. Backward pass
