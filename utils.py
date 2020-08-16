@@ -4,6 +4,21 @@ import matplotlib.pyplot as plt
 
 def create_fake_data(num_points=200, num_petals=8, random_jitter_strength=0.02,
                      wrong_label_ratio=0.1):
+    """
+    Creates mock data in order to test code. The data created is a 2D flower pattern, where each petal belongs to a
+    certain class depending on the octant where it lies.
+
+    It is possible to make data noisy by adding random jitter to the position of the points so that they don't like
+    precisely on the petal contour. Additionally, it is possible to create a random set of incorrect labels. This noise
+    makes it possible to test models robustness.
+    :param num_points: number of examples the dataset will have.
+    :param num_petals: number of petals the flower will have, therefore what shape will the data have in the 2D space.
+    :param random_jitter_strength: how much random noise will be added to the horizontal and vertical components of the
+    data.
+    :param wrong_label_ratio: what ratio of mislabeled data will the dataset contain.
+    :return: two matrices of shapes (2, num_points) and (1, num_points), containing the input data and labels
+    respectively.
+    """
     assert num_petals % 2 == 0, "# of petals has to be an even number"
 
     np.random.seed(123)
