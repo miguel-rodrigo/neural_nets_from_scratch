@@ -66,7 +66,6 @@ class Model:
 
     # TODO: This is a pass through the whole training set. Add minibatch option!
     def train(self, X, Y, n_epochs=100, learning_rate=0.003):
-        loss = np.inf
         m = X.shape[1]
 
         for i in range(n_epochs):
@@ -88,7 +87,7 @@ class Model:
                 A_prev, dA = layer.backward_pass(prev_A=A_prev, prev_dA=dA)
 
             # 4. Update parameters
-            self.update_parameters()
+            self.update_parameters(learning_rate=learning_rate)
 
     def update_parameters(self, learning_rate=0.05):
         for layer in self.layers:
