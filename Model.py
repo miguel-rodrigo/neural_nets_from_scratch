@@ -1,5 +1,5 @@
 import numpy as np
-from Layer import Layer
+from layer import Layer
 import activations
 
 
