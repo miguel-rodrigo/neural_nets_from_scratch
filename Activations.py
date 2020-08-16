@@ -10,10 +10,6 @@ class Activation:
     def backward(x):
         raise NotImplementedError
 
-#    @classmethod
-#    def __repr__(cls):
-#        return cls.__name__
-
 
 class ReLU(Activation):
     @staticmethod
