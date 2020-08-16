@@ -126,3 +126,5 @@ def gradient_checking(model, X, Y, epsilon=1e-7):
         numerator = np.linalg.norm(grads[i]['b'] - grad_approx_b)
         denominator = np.linalg.norm(grads[i]['b']) + np.linalg.norm(grad_approx_b)
         differences[i]['b'] = numerator / denominator
+
+    return differences
