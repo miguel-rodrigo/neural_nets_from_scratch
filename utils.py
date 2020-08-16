@@ -46,6 +46,14 @@ def create_train_test_split(train_to_test_ratio=0.8):
 
 # TODO: Study what this function does to understand/fix the output
 def draw_decision_boundary(model, X, y):
+    """
+    Draws decision boundary of the given model. Additionally, it draws the dataset that it was trained on to help
+    evaluate if the model extrapolates properly or if its overfitting.
+    :param model: model object to be given as defined on the Model class
+    :param X: data used for training.
+    :param y: labels corresponding to that data.
+    :return: None
+    """
     # Set min and max values and give it some padding
     x_min, x_max = X[0, :].min() - 1, X[0, :].max() + 1
     y_min, y_max = X[1, :].min() - 1, X[1, :].max() + 1
@@ -60,3 +68,23 @@ def draw_decision_boundary(model, X, y):
     plt.ylabel('x2')
     plt.xlabel('x1')
     plt.scatter(X[0, :], X[1, :], c=y, cmap=plt.cm.Spectral)
+
+    def gradient_checking(model, X, Y, epsilon=1e-7):
+        """
+        Checks the relative difference between the gradients estimated through backprop vs. gradients estimated
+        using the definition of derivatives (computing the rate of growth over a small step epsilon).
+
+        The goal of this function is to detect errors on the backpropagation formulae.
+        :param model: trained model to be tested
+        :param X: data used to trained the model
+        :param Y: labels used to trained the model, necesary to compute the cost function
+        :param epsilon: size of the step to be used in the gradient approximations
+        :return: relative difference of backprop vs. approximate gradients, by layer and set of parameters
+        """
+        grads = [{'W': l.W, 'b': l.b} for l in model.layers]
+        grad_approx = [{'W': 0., 'b': 0.}] * len(grads)
+
+        for i in range(len(grads)):
+            theta_plus = grads
+            theta_plus[i]['W'] = theta_plus[i]['W'] + epsilon
+
