@@ -112,12 +112,13 @@ class Model:
         y_hat = np.float_(A_prev >= 0.5)
         return y_hat
 
-    # def gradient_checking(self, X, Y, epsilon=1e-7):
-    #     grads = [(l.W, l.b) for l in self.layers]
-    #     grad_approx = [(0., 0.)] * len(grads)
-    #
-    #     for i in range(len(grad_approx)):
-    #         theta_plus =
+    # For each parameter type (2*number of layers):
+    #   - sumarle y restarle epsilon a toda la matriz de ese parámetro
+    #   - crear un modelo con esos nuevos parámetros
+    #   - calcular el coste de ese modelo con esos parámetros (j_plus y j_minus)
+    #   - calcular el grad_approx con la fórmula definición de la derivada
+    #   - calcular la diferencia relativa con la fórmula del curso
+    # mover esta función a utils.py??
 
 
 if __name__ == "__main__":
