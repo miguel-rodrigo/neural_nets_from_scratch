@@ -97,7 +97,7 @@ def gradient_checking(model, X, Y, epsilon=1e-7):
     :param epsilon: size of the step to be used in the gradient approximations
     :return: relative difference of backprop vs. approximate gradients, by layer and set of parameters
     """
-    from Model import Model
+    from model import Model
 
     n_units_vector = [model.input_size] + model.layer_sizes
     activations = [l.activation_class for l in model.layers]
