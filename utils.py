@@ -99,7 +99,7 @@ def gradient_checking(model, X, Y, epsilon=1e-7):
     from model import Model
 
     n_units_vector = [model.input_size] + model.layer_sizes
-    activations = [l.activation_class for l in model.layers]
+    activations = [layer.activation_class for layer in model.layers]
 
     grads = model.gradients
     differences = [{'W': 0., 'b': 0.}] * len(grads)
