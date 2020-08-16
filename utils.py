@@ -59,7 +59,6 @@ def create_train_test_split(train_to_test_ratio=0.8):
     pass
 
 
-# TODO: Study what this function does to understand/fix the output
 def draw_decision_boundary(model, X, y):
     """
     Draws decision boundary of the given model. Additionally, it draws the dataset that it was trained on to help
