@@ -1,6 +1,7 @@
 import numpy as np
 import activations
 
+# TODO: Test backward pass
 
 class TestActivations:
     def setup(self):
