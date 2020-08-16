@@ -3,7 +3,6 @@ from Layer import Layer
 import Activations
 
 
-
 class Model:
     # TODO:
     #   - Gradient checking: I believe my gradients are off...results are awful :(
@@ -25,8 +24,8 @@ class Model:
         if parameters is not None:
             # TODO: is it better to use try/except instead? research that
             # Make sure parameters has the correct length
-            assert len(parameters) == len(self.layers),\
-                "Length of parameters list ({}) does not match #of layers {}"\
+            assert len(parameters) == len(self.layers), \
+                "Length of parameters list ({}) does not match #of layers {}" \
                 .format(len(parameters), len(self.layers))
             # Make sure parameters is a list of dicts
             assert isinstance(parameters, list)
@@ -54,7 +53,7 @@ class Model:
         for i, layer in enumerate(self.layers):
             s += "\n"
             s += "----------\n"
-            s += "Layer " + str(i+1) + ":\n"
+            s += "Layer " + str(i + 1) + ":\n"
             s += "----------\n"
             s += "# of units: " + str(self.layer_sizes[i]) + "\n"
             s += "Activation: " + str(layer.activation_class) + "\n"
@@ -123,7 +122,7 @@ if __name__ == "__main__":
     X, Y = utils.create_fake_data()
     n_epochs = 1000
     for i, iteration_loss in enumerate(model.train(X, Y, n_epochs=n_epochs)):
-        if i % 100 == 0 or i == n_epochs-1:
+        if i % 100 == 0 or i == n_epochs - 1:
             print("Loss on iteration {}: {}".format(i, iteration_loss))
 
     utils.draw_decision_boundary(model, X, Y)
