@@ -3,6 +3,7 @@ import activations
 
 # TODO: Test backward pass
 
+
 class TestActivations:
     def setup(self):
         # 5 examples, 2-D:
