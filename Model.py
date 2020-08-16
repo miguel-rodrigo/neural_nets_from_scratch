@@ -1,6 +1,6 @@
 import numpy as np
 from Layer import Layer
-import Activations
+import activations
 
 
 class Model:
@@ -119,7 +119,7 @@ if __name__ == "__main__":
     np.random.seed(1)
 
     n_units = [2, 4, 2, 1]
-    activations = [Activations.ReLU, Activations.ReLU, Activations.Sigmoid]
+    activations = [activations.ReLU, activations.ReLU, activations.Sigmoid]
     model = Model(n_units, activations)
 
     X, Y = utils.create_fake_data()
