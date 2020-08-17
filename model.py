@@ -95,6 +95,7 @@ class Model:
             for i in range(len(self.layers)-1, 0, -1):
                 dA = self.layers[i].backward_pass(prev_A=self.layers[i-1].cache['A'], prev_dA=dA)
 
+            # The previous activation for the first layer is simple X
             _ = self.layers[0].backward_pass(prev_A=X, prev_dA=dA)
 
             # 4. Update parameters
