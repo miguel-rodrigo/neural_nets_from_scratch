@@ -84,7 +84,7 @@ class Model:
                 A_prev = layer.forward_pass(A_prev)
 
             # 2. Compute and return loss for evaluation
-            Y_hat = A_prev
+            Y_hat = A_prev  # Previous activation of the last layer is actually the prediction
             loss = self.loss_function(Y, Y_hat)
             yield loss
 
@@ -92,8 +92,10 @@ class Model:
             # TODO: test np.multiply(-y, 1/y_hat)... for multivariate y and y_hat
             #   --> for multivariate won't work, what do we use for softmax loss?
             dA = np.multiply(-Y, 1 / Y_hat) + np.multiply((1 - Y), 1 / (1 - Y_hat))
-            for layer in self.layers[::-1]:
-                A_prev, dA = layer.backward_pass(prev_A=A_prev, prev_dA=dA)
+            for i in range(len(self.layers)-1, 0, -1):
+                dA = self.layers[i].backward_pass(prev_A=self.layers[i-1].cache['A'], prev_dA=dA)
+
+            _ = self.layers[0].backward_pass(prev_A=X, prev_dA=dA)
 
             # 4. Update parameters
             self.update_parameters(learning_rate=learning_rate)
