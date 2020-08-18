@@ -75,8 +75,6 @@ class Model:
 
     # TODO: This is a pass through the whole training set. Add minibatch option!
     def train(self, X, Y, n_epochs=100, learning_rate=0.003):
-        m = X.shape[1]
-
         for i in range(n_epochs):
             # 1. Forward pass
             A_prev = X
@@ -89,9 +87,7 @@ class Model:
             yield loss
 
             # 3. Backward pass
-            # TODO: test np.multiply(-y, 1/y_hat)... for multivariate y and y_hat
-            #   --> for multivariate won't work, what do we use for softmax loss?
-            dA = np.multiply(-Y, 1 / Y_hat) + np.multiply((1 - Y), 1 / (1 - Y_hat))
+            dA = np.divide(-Y, Y_hat) + np.divide(1 - Y, 1 - Y_hat)
             for i in range(len(self.layers)-1, 0, -1):
                 dA = self.layers[i].backward_pass(prev_A=self.layers[i-1].cache['A'], prev_dA=dA)
 
@@ -129,10 +125,15 @@ if __name__ == "__main__":
     activations = [activations.ReLU, activations.ReLU, activations.Sigmoid]
     model = Model(n_units, activations)
 
-    X, Y = utils.create_fake_data()
-    n_epochs = 1000
-    for i, iteration_loss in enumerate(model.train(X, Y, n_epochs=n_epochs)):
-        if i % 100 == 0 or i == n_epochs - 1:
+    X, Y = utils.create_fake_data(
+        random_jitter_strength=0,
+        wrong_label_ratio=0
+    )
+    n_epochs = 1000000
+    for i, iteration_loss in enumerate(model.train(X, Y, n_epochs=n_epochs, learning_rate=0.008)):
+        if i % 10000 == 0 or i == n_epochs - 1:
             print("Loss on iteration {}: {}".format(i, iteration_loss))
 
     utils.draw_decision_boundary(model, X, Y)
+
+    diffs = utils.gradient_checking(model, X, Y)
