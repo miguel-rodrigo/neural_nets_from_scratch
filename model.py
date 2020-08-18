@@ -106,13 +106,17 @@ class Model:
             layer.W = layer.W - learning_rate * layer.dW
             layer.b = layer.b - learning_rate * layer.db
 
-    def predict(self, X):
+    def predict(self, X, return_probabilities=False):
         A_prev = X
         for layer in self.layers:
             A_prev = layer.forward_pass(A_prev)
 
         # The last "previous" activation is actually the prediction
-        y_hat = np.float_(A_prev >= 0.5)
+        if return_probabilities:
+            y_hat = A_prev
+        else:
+            y_hat = np.float_(A_prev >= 0.5)
+
         return y_hat
 
 
