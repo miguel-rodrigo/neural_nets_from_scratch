@@ -9,6 +9,7 @@ class Model:
     #   - Make the parameters update function depend on the optimizer
     #   - Make predictions on validation set during training
     #   - Create plot of training loss and validation loss during training process
+    #   - Add regularization options
 
     def __init__(self, n_units_vector, activations, parameters=None):
         self.input_size = n_units_vector[0]
