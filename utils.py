@@ -102,43 +102,43 @@ def gradient_checking(model, X, Y, epsilon=1e-7):
     activations = [layer.activation_class for layer in model.layers]
 
     grads = model.gradients
-    differences = [{'W': 0., 'b': 0.}] * len(grads)
+    differences = [{'W': 0., 'b': 0.} for _ in grads]
 
     for i in range(len(grads)):
         # Once for W...
         theta_plus = model.parameters
         theta_plus[i]['W'] = theta_plus[i]['W'] + epsilon
         tmp_model = Model(n_units_vector, activations, parameters=theta_plus)
-        tmp_predictions = tmp_model.predict(X)
+        tmp_predictions = tmp_model.predict(X, return_probabilities=True)
         cost_plus = model.loss_function(Y, tmp_predictions)
 
         theta_minus = model.parameters
         theta_plus[i]['W'] = theta_plus[i]['W'] - epsilon
         tmp_model = Model(n_units_vector, activations, parameters=theta_minus)
-        tmp_predictions = tmp_model.predict(X)
+        tmp_predictions = tmp_model.predict(X, return_probabilities=True)
         cost_minus = model.loss_function(Y, tmp_predictions)
 
         grad_approx_W = (cost_plus - cost_minus) / (2*epsilon)
-        numerator = np.linalg.norm(grads[i]['W'] - grad_approx_W)
-        denominator = np.linalg.norm(grads[i]['W']) + np.linalg.norm(grad_approx_W)
+        numerator = np.linalg.norm(grads[i]['dW'] - grad_approx_W)
+        denominator = np.linalg.norm(grads[i]['dW']) + np.linalg.norm(grad_approx_W)
         differences[i]['W'] = numerator / denominator
 
         # ...and another time for b
         theta_plus = model.parameters
         theta_plus[i]['b'] = theta_plus[i]['b'] + epsilon
         tmp_model = Model(n_units_vector, activations, parameters=theta_plus)
-        tmp_predictions = tmp_model.predict(X)
+        tmp_predictions = tmp_model.predict(X, return_probabilities=True)
         cost_plus = model.loss_function(Y, tmp_predictions)
 
         theta_minus = model.parameters
         theta_plus[i]['b'] = theta_plus[i]['b'] - epsilon
         tmp_model = Model(n_units_vector, activations, parameters=theta_minus)
-        tmp_predictions = tmp_model.predict(X)
+        tmp_predictions = tmp_model.predict(X, return_probabilities=True)
         cost_minus = model.loss_function(Y, tmp_predictions)
 
         grad_approx_b = (cost_plus - cost_minus) / (2 * epsilon)
-        numerator = np.linalg.norm(grads[i]['b'] - grad_approx_b)
-        denominator = np.linalg.norm(grads[i]['b']) + np.linalg.norm(grad_approx_b)
+        numerator = np.linalg.norm(grads[i]['db'] - grad_approx_b)
+        denominator = np.linalg.norm(grads[i]['db']) + np.linalg.norm(grad_approx_b)
         differences[i]['b'] = numerator / denominator
 
     return differences
