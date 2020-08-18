@@ -3,7 +3,7 @@ import numpy as np
 
 class Layer:
     def __init__(self, n_units, n_units_next, activation_class):
-        self.W = np.random.standard_normal((n_units_next, n_units))
+        self.W = np.random.standard_normal((n_units_next, n_units)) * 0.01
         self.b = np.zeros((n_units_next, 1))
 
         self.dW = np.array(())
@@ -34,5 +34,4 @@ class Layer:
         self.db = 1/m * np.sum(dZ, axis=1, keepdims=True)
         dA = np.dot(self.W.T, dZ)
 
-        # return self.cache['A'], dA
         return dA
